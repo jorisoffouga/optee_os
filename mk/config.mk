@@ -1051,6 +1051,10 @@ $(eval $(call cfg-depends-all,CFG_AT24,CFG_DRIVERS_I2C))
 CFG_PCF8591 ?= n
 $(eval $(call cfg-depends-all,CFG_PCF8591,CFG_DRIVERS_I2C))
 
+# When enabled, CFG_I2C_DEVICES_PTA embeds a PTA giving user TAs access to
+# the I2C device drivers above.
+CFG_I2C_DEVICES_PTA ?= n
+
 # When enabled, CFG_DRIVERS_NVMEM provides a framework to register nvmem
 # providers and allow consumer drivers to get NVMEM cells using the Device Tree.
 CFG_DRIVERS_NVMEM ?= n
