@@ -1028,6 +1028,11 @@ CFG_DRIVERS_I2C ?= n
 CFG_LM75 ?= n
 $(eval $(call cfg-depends-all,CFG_LM75,CFG_DRIVERS_I2C))
 
+# When enabled, CFG_MCP23008 embeds a driver for the MCP23008 I2C GPIO
+# expander, also a GPIO provider when CFG_DRIVERS_GPIO is enabled.
+CFG_MCP23008 ?= n
+$(eval $(call cfg-depends-all,CFG_MCP23008,CFG_DRIVERS_I2C))
+
 # When enabled, CFG_DRIVERS_NVMEM provides a framework to register nvmem
 # providers and allow consumer drivers to get NVMEM cells using the Device Tree.
 CFG_DRIVERS_NVMEM ?= n
