@@ -1033,6 +1033,14 @@ $(eval $(call cfg-depends-all,CFG_LM75,CFG_DRIVERS_I2C))
 CFG_MCP23008 ?= n
 $(eval $(call cfg-depends-all,CFG_MCP23008,CFG_DRIVERS_I2C))
 
+# When enabled, CFG_MCP7940X embeds a driver for the MCP7940x/MCP7941x I2C
+# RTC. CFG_MCP7940X_SYSTEM_RTC registers the first one as the OP-TEE system
+# RTC (requires CFG_DRIVERS_RTC).
+CFG_MCP7940X ?= n
+CFG_MCP7940X_SYSTEM_RTC ?= n
+$(eval $(call cfg-depends-all,CFG_MCP7940X,CFG_DRIVERS_I2C))
+$(eval $(call cfg-depends-all,CFG_MCP7940X_SYSTEM_RTC,CFG_MCP7940X CFG_DRIVERS_RTC))
+
 # When enabled, CFG_DRIVERS_NVMEM provides a framework to register nvmem
 # providers and allow consumer drivers to get NVMEM cells using the Device Tree.
 CFG_DRIVERS_NVMEM ?= n
