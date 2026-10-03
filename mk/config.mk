@@ -1023,6 +1023,11 @@ CFG_DRIVERS_GPIO ?= n
 # When enabled, CFG_DRIVERS_I2C provides I2C controller and devices support.
 CFG_DRIVERS_I2C ?= n
 
+# When enabled, CFG_LM75 embeds a driver for LM75/LM75A I2C temperature
+# sensors described in the secure device tree.
+CFG_LM75 ?= n
+$(eval $(call cfg-depends-all,CFG_LM75,CFG_DRIVERS_I2C))
+
 # When enabled, CFG_DRIVERS_NVMEM provides a framework to register nvmem
 # providers and allow consumer drivers to get NVMEM cells using the Device Tree.
 CFG_DRIVERS_NVMEM ?= n
