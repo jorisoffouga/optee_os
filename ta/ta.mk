@@ -38,6 +38,7 @@ ta-mk-file-export-vars-$(sm) += CFG_SECURE_DATA_PATH
 ta-mk-file-export-vars-$(sm) += CFG_TA_MBEDTLS_SELF_TEST
 ta-mk-file-export-vars-$(sm) += CFG_TA_MBEDTLS
 ta-mk-file-export-vars-$(sm) += CFG_TA_MBEDTLS_MPI
+ta-mk-file-export-vars-$(sm) += CFG_TA_MBEDTLS_TLS_CLIENT
 ta-mk-file-export-vars-$(sm) += CFG_SYSTEM_PTA
 ta-mk-file-export-vars-$(sm) += CFG_FTRACE_SUPPORT
 ta-mk-file-export-vars-$(sm) += CFG_UNWIND
@@ -185,6 +186,13 @@ $$(foreach h, $$(sf), $$(eval $$(call copy-file, $1/$$(h), \
 endef
 $(foreach d, $(incdirs$(sm)), \
 	$(eval $(call copy-incdir,$(d),$(out-dir)/export-$(sm)/include,include)))
+
+# mbedTLS internal header defining mbedtls_pk_info_t, for TAs providing a
+# custom key (e.g. a TLS client key held by another TA)
+ifeq ($(CFG_TA_MBEDTLS_TLS_CLIENT),y)
+$(eval $(call copy-file, lib/libmbedtls/mbedtls/library/pk_wrap.h, \
+	$(out-dir)/export-$(sm)/include/mbedtls_private,include))
+endif
 
 # Copy the .h files needed by host
 $(foreach d, $(incdirs-host), \

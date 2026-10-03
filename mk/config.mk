@@ -806,6 +806,10 @@ $(call force,CFG_TA_MBEDTLS,y)
 # need to be called to test anything
 CFG_TA_MBEDTLS_SELF_TEST ?= y
 
+# Compile the TA library mbedTLS with the TLS 1.2 client (ECDHE key exchange
+# only), so that TAs can open TLS connections over the GP TEE sockets
+CFG_TA_MBEDTLS_TLS_CLIENT ?= y
+
 # By default use tomcrypt as the main crypto lib providing an implementation
 # for the API in <crypto/crypto.h>
 # CFG_CRYPTOLIB_NAME is used as libname and
