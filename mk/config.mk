@@ -1041,6 +1041,11 @@ CFG_MCP7940X_SYSTEM_RTC ?= n
 $(eval $(call cfg-depends-all,CFG_MCP7940X,CFG_DRIVERS_I2C))
 $(eval $(call cfg-depends-all,CFG_MCP7940X_SYSTEM_RTC,CFG_MCP7940X CFG_DRIVERS_RTC))
 
+# When enabled, CFG_AT24 embeds a driver for AT24 family I2C EEPROMs
+# (24c01 .. 24c512) described in the secure device tree.
+CFG_AT24 ?= n
+$(eval $(call cfg-depends-all,CFG_AT24,CFG_DRIVERS_I2C))
+
 # When enabled, CFG_DRIVERS_NVMEM provides a framework to register nvmem
 # providers and allow consumer drivers to get NVMEM cells using the Device Tree.
 CFG_DRIVERS_NVMEM ?= n
