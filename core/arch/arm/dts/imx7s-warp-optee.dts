@@ -1,0 +1,87 @@
+// SPDX-License-Identifier: BSD-2-Clause
+/*
+ * OP-TEE secure device tree for the WaRP7 board: hardware owned by the
+ * secure world. Disable the same nodes in the Linux device tree.
+ */
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	model = "WaRP7 (OP-TEE secure view)";
+	compatible = "warp,imx7s-warp", "fsl,imx7s";
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	soc {
+		compatible = "simple-bus";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		/*
+		 * GPIO bank and pin controller shared with Linux: OP-TEE only
+		 * touches the pads and pins its own nodes reference.
+		 */
+		gpio7: gpio@30260000 {
+			compatible = "fsl,imx7d-gpio", "fsl,imx35-gpio";
+			reg = <0x30260000 0x10000>;
+			gpio-controller;
+			#gpio-cells = <2>;
+		};
+
+		iomuxc: pinctrl@30330000 {
+			compatible = "fsl,imx7d-iomuxc";
+			reg = <0x30330000 0x10000>;
+
+			pinctrl_mcp23008: mcp23008grp {
+				fsl,pins = <
+					/* ENET1_RGMII_RX_CTL -> GPIO7_IO4, keep pad config */
+					0x023c 0x04ac 0x0000 0x5 0x0 0x80000000
+				>;
+			};
+		};
+
+		/* IO board I2C bus */
+		i2c3: i2c@30a40000 {
+			compatible = "fsl,imx7d-i2c", "fsl,imx21-i2c";
+			reg = <0x30a40000 0x10000>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			clock-frequency = <100000>;
+			status = "okay";
+
+			mcp23008: gpio@20 {
+				compatible = "microchip,mcp23008";
+				reg = <0x20>;
+				pinctrl-names = "default";
+				pinctrl-0 = <&pinctrl_mcp23008>;
+				/* RESET# on GPIO7_IO4: pulsed, then driven high */
+				reset-gpios = <&gpio7 4 GPIO_ACTIVE_LOW>;
+				gpio-controller;
+				#gpio-cells = <2>;
+			};
+
+			pcf8591@48 {
+				compatible = "nxp,pcf8591";
+				reg = <0x48>;
+			};
+
+			lm75a@4b {
+				compatible = "national,lm75a";
+				reg = <0x4b>;
+			};
+
+			eeprom@50 {
+				compatible = "atmel,24c08";
+				reg = <0x50>;
+				pagesize = <16>;
+			};
+
+			rtc@6f {
+				compatible = "microchip,mcp7940x";
+				reg = <0x6f>;
+			};
+		};
+	};
+};
