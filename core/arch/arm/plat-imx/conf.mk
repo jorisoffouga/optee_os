@@ -604,6 +604,12 @@ endif
 # bootaux), and the M4 is a non-secure bus master.
 CFG_IMX_CSU_M4_OCRAM_S ?= n
 
+# i.MX7: leave the RDC open to the normal world and the Cortex-M4, which
+# assigns itself and its peripherals to an RDC domain at startup (e.g. the
+# Zephyr mcimx7d_m4 SoC code). OP-TEE does not use the RDC on i.MX7, but the
+# normal world can then change the RDC domain permissions.
+CFG_IMX_CSU_M4_RDC ?= n
+
 ifneq (,$(filter y, $(CFG_MX8M)))
 ifneq ($(CFG_INSECURE),y)
 $(call force,CFG_TZASC_REGION0_SECURE,y)
