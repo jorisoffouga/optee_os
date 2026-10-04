@@ -598,6 +598,12 @@ ifneq (,$(filter y, $(CFG_MX6) $(CFG_MX7)))
 CFG_IMX_CSU ?= y
 endif
 
+# i.MX7: leave OCRAM_S open to the normal world and the Cortex-M4. The M4
+# fetches its initial stack pointer and reset vector from OCRAM_S (its
+# address 0), written there by the normal world (Linux remoteproc, U-Boot
+# bootaux), and the M4 is a non-secure bus master.
+CFG_IMX_CSU_M4_OCRAM_S ?= n
+
 ifneq (,$(filter y, $(CFG_MX8M)))
 ifneq ($(CFG_INSECURE),y)
 $(call force,CFG_TZASC_REGION0_SECURE,y)

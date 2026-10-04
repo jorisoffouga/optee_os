@@ -68,7 +68,9 @@ const struct csu_setting csu_setting_imx7ds[] = {
 	{14, 0x3300FF},		/* Protect RDC     */
 	{15, 0xFF0033},		/* Protect CSU     */
 	{28, 0xFF0033},		/* Protect TZASC   */
+#ifndef CFG_IMX_CSU_M4_OCRAM_S
 	{59, 0x3300FF},		/* Protect OCRAM_S */
+#endif
 	{(-1), 0},
 };
 
