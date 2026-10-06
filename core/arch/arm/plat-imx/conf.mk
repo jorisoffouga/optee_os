@@ -699,3 +699,23 @@ ifeq ($(CFG_IMX_GPIO),y)
 $(call force,CFG_DT,y,Required by CFG_IMX_GPIO)
 $(call force,CFG_DRIVERS_GPIO,y,Required by CFG_IMX_GPIO)
 endif
+
+# i.MX7 (Cortex-M4), i.MX8MP (Cortex-M7): load, authenticate, start and stop
+# the Cortex-M firmware through the remoteproc TA (Linux imx_rproc
+# "fsl,imx7d-cm4-tee", "fsl,imx8mp-cm7-tee"). The firmware is signed with
+# scripts/sign_rproc_fw.py and the RPROC_SIGN_KEY private key.
+# CFG_IMX_REMOTEPROC_DDR_START/SIZE add a DDR region to the Cortex-M
+# memories (OCRAM_S, OCRAM and TCM on i.MX7, TCM on i.MX8MP), for firmware
+# linked in DDR.
+CFG_IMX_REMOTEPROC ?= n
+ifeq ($(CFG_IMX_REMOTEPROC),y)
+ifeq (,$(filter y, $(CFG_MX7) $(CFG_MX8MP)))
+$(error CFG_IMX_REMOTEPROC is only supported on i.MX7 and i.MX8MP)
+endif
+$(call force,CFG_DRIVERS_REMOTEPROC,y)
+$(call force,CFG_REMOTEPROC_PTA,y)
+CFG_IN_TREE_EARLY_TAS += remoteproc/80a4c275-0a47-4905-8285-1486a9771a08
+RPROC_SIGN_KEY ?= keys/default.pem
+CFG_IMX_REMOTEPROC_DDR_START ?= 0
+CFG_IMX_REMOTEPROC_DDR_SIZE ?= 0
+endif
